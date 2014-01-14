@@ -1,5 +1,6 @@
 ---
-title: Contact
+title: Kapcsolat
+lang: hu
 ---
 
 palotai.robin _@/" gmail.com
