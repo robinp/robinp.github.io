@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Challenge24 rangsoroló - Palotai Robin blogol</title>
+    <link rel="stylesheet" type="text/css" href="../../css/default.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/syntax.css" />
+  </head>
+  <body>
+    <div id="header">
+      <div id="logo">
+        <a href="../../">Palotai Robin blogol</a>
+      </div>
+      <div id="navigation">
+        <a href="../../index-hu.html">Kezdőlap</a>
+        <a href="../../contact-hu.html"> Kapcsolat</a>
+        <!--a href="/archive-hu.html">Archívum</a-->
+      </div>
+      <div id="switcher">
+        <a href="../../index.html">In English</a>
+        <a href="../../index-hu.html">Magyarul</a>
+      </div>
+    </div>
+
+    <div id="content">
+      <h1>Challenge24 rangsoroló</h1>
+      <div class="info">
+    Posted on 2014-02-08
+    
+</div>
+
+<p>Ma zajlott a <a href="http://ch24.org">ch24</a> programozó verseny rangsorolója, ahol kis csapatunk a hagyományoknak megfelelően célul tűzte ki, hogy majd jövőre bejutunk a döntőbe. A cél idén megvalósítható felét (azaz, hogy idén nem jutunk be) sikerrel hoztuk, és tanultunk valami hasznosat is.</p>
+<p>Gratulálunk a szervezőknek, leleményes feladatsort sikerült összerakniuk, élvezettel olvastuk át. Az én választásom a B feladatra esett: Itt meg kellett határoznunk, hogy egy telefonhálózatban egy adott vonalat lehallgatva milyen eséllyel csípjük el az üzenetet, ha a hálózat tagjai optimálisan (felesleges hívások nélkül) juttatják azt el minden tagnak.</p>
+<p>A bújtatott kérdés az, hogy a hálózat (gráf) lehetséges feszítőfái közül hány tartalmazza a lehallgatott élt. Némi keresgélés után találtunk egy elegáns algoritmust, ami <a href="http://math.stackexchange.com/questions/90950/finding-the-number-of-spanning-trees-of-a-graph-g#">élösszecsukás-éltörlés</a> néven fut: A gráf tetszőlegesen választott élét egyszer eltávolítva, másszor összecsukva egy-egy új gráfot képezünk, s a feszítőfák számát a két származtatott gráf feszítőfái számának összegeként kapjuk. Az eljárás tehát rekurzív, leállító feltétel lehet az egy élű gráf esete.</p>
+<p>Mivel régóta ki akartam próbálni a <a href="http://hackage.haskell.org/package/fgl-5.4.2.4">funkcionális gráf függvénykönyvtárat</a> (FGL), rávetődtem eme kézenfekvő definícióra. Az FGL kezesbáránynak bizonyult, könnyű és élvezetes vele dolgozni. Ahelyett, hogy bemutatnám a - kezdetben elegáns, majd később a peremfeltételek miatt kissé bonyolódó - feszítőfa-szám számoló algoritmust, egy kisebb, élösszecsukást végző kóddarabbal szemléltetném az FGL tömörségét:</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">collapse ::</span> (<span class="dt">Eq</span> a, <span class="dt">Eq</span> b, <span class="dt">DynGraph</span> gr) <span class="ot">=&gt;</span> <span class="dt">Edge</span> <span class="ot">-&gt;</span> gr a b <span class="ot">-&gt;</span> gr a b
+collapse (a, b) g <span class="fu">=</span>
+  <span class="kw">let</span> (<span class="dt">Just</span> (a_in, _, lbl, a_out), g1) <span class="fu">=</span> match a g
+      (<span class="dt">Just</span> (b_in, _, _, b_out), g2) <span class="fu">=</span> match b g1
+      c_in <span class="fu">=</span> removeLinksOf b a_in <span class="fu">++</span> removeLinksOf a b_in
+      c_out <span class="fu">=</span> removeLinksOf b a_out <span class="fu">++</span> removeLinksOf a b_out
+      ctx <span class="fu">=</span> (c_in, a, lbl, c_out)
+  <span class="kw">in</span> ctx <span class="fu">&amp;</span> g2
+  <span class="kw">where</span>
+<span class="ot">    removeLinksOf ::</span> <span class="dt">Node</span> <span class="ot">-&gt;</span> <span class="dt">Adj</span> b <span class="ot">-&gt;</span> <span class="dt">Adj</span> b
+    removeLinksOf n adj <span class="fu">=</span>
+      filter ((<span class="fu">/=</span> n) <span class="fu">.</span> snd) adj</code></pre>
+<p>A <code>match</code> függvény a megadott pontot kiszakítja a gráfból, és visszaad egy pont-környezetet, valamint a lyukas gráfot (ez ahhoz lehet hasonló, mint amikor egy kövér bogát átrepül a pókhálón). A pont-környezet a pont címkéjét, szomszédos éleit tartalmazza, és különlegessége, hogy az <code>(&amp;)</code> művelettel az - akár módosított - környezetet vissza lehet illeszteni a gráfba (a bogár elszégyellte magát, és visszahozta a hálódarabot).</p>
+<p>Mielőtt elájulhattunk volna az algoritmus eleganciájától, szembesültünk vele, hogy bizony a B2 bemenetre igencsak nem akar eredményt produkálni. Némi utánagondolással (amit jó lett volna előre megtenni) kiderül, szeretett algoritmusunk az élek számában saccra exponenciális futásidejű. Ajjaj.</p>
+<p>Tovább böngészve ráleltünk a <a href="http://en.wikipedia.org/wiki/Kirchhoff's_theorem">Kirchoff-törvényre</a>, ami némi mágikus lineáris algebrával közvetlenül meghatározza a feszítőfák számát. Győzelem! Azonban a B7 bemenet körül már meg sem lepődünk, amikor hirtelen elkezdünk <code>NaN</code> számú feszítőfát kapni - a bemeneti gráfok túl nagyok, a mátrixszámítás túlcsordul. Még szerencse, hogy a <a href="http://hackage.haskell.org/package/hmatrix">hmatrix</a> csomag (vigyázat, GPL) tudja a determináns logaritmusát is számítani, és erre fel is hívja a figyelmünket. A (le(nem)hallgatott feszítőfák) / (összes feszítőfák) osztás logaritmus alatt kivonássá válik. Végül ezt a relatíve tömör - és időhiány miatt meglehetősen kukabúvár stílusú - algoritmust kapjuk:</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">spanTrees ::</span> (<span class="dt">Graph</span> gr) <span class="ot">=&gt;</span> gr a b <span class="ot">-&gt;</span> (<span class="co">{-det-}</span> <span class="dt">Double</span>, <span class="co">{-log det-}</span> <span class="dt">Double</span>)
+spanTrees g <span class="fu">=</span>
+  <span class="kw">let</span> v <span class="fu">=</span> noNodes g
+      degs <span class="fu">=</span> diagRect <span class="dv">0</span> (buildVector v (fromIntegral <span class="fu">.</span> outdeg g)) v v
+<span class="ot">               ::</span> <span class="dt">Matrix</span> <span class="dt">Double</span>
+      adjs <span class="fu">=</span> buildMatrix v v (\(i,j) <span class="ot">-&gt;</span> <span class="kw">if</span> j <span class="ot">`elem`</span> neighbors g i <span class="kw">then</span> <span class="dv">1</span> <span class="kw">else</span> <span class="dv">0</span>)
+      laplace <span class="fu">=</span> liftMatrix2 (zipVectorWith (<span class="fu">-</span>)) degs adjs
+      sub <span class="fu">=</span> subMatrix (<span class="dv">0</span>,<span class="dv">0</span>) (v<span class="fu">-</span><span class="dv">1</span>,v<span class="fu">-</span><span class="dv">1</span>) laplace
+  <span class="kw">in</span> (det sub, fst <span class="fu">.</span> snd <span class="fu">.</span> invlndet <span class="fu">$</span> sub)
+
+main <span class="fu">=</span> <span class="kw">do</span>
+  (v,e) <span class="ot">&lt;-</span> getIntPair
+  edges <span class="ot">&lt;-</span> replicateM e getIntPair
+  <span class="kw">let</span> ns <span class="fu">=</span> map n [<span class="dv">0</span><span class="fu">..</span>v<span class="fu">-</span><span class="dv">1</span>]
+      es <span class="fu">=</span> uniqueLabels edges
+      g <span class="fu">=</span> undir <span class="fu">$</span> mkGraph ns<span class="ot"> es ::</span> <span class="dt">Gr</span> () <span class="dt">Int</span>
+  <span class="kw">let</span> (allSpans, allLog) <span class="fu">=</span> spanTrees g
+      selected_e <span class="fu">=</span> (\(a,b) <span class="ot">-&gt;</span> (a,b,<span class="dv">1</span>)) (head edges)
+      (otherSpans, otherLog) <span class="fu">=</span>
+        spanTrees (delLEdge selected_e <span class="fu">.</span> delLEdge (revL selected_e) <span class="fu">$</span> g)
+  print <span class="fu">$</span> (allSpans <span class="fu">-</span> otherSpans) <span class="fu">/</span> allSpans
+  print <span class="fu">$</span> <span class="dv">1</span><span class="fu">.</span><span class="dv">0</span> <span class="fu">-</span> (exp <span class="fu">$</span> otherLog <span class="fu">-</span> allLog)</code></pre>
+<p>Ha ezzel a változattal kezdjük, akkor közelebb kerültünk volna a döntőhöz, de így legalább többet tanultunk.</p>
+
+    </div>
+
+    <div id="footer">
+      Weboldal motor:
+      <a href="http://jaspervdj.be/hakyll">Hakyll</a>
+    </div>
+  </body>
+</html>
