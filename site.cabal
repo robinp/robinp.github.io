@@ -19,8 +19,8 @@ executable site
   -- other-modules:
   -- other-extensions:
   build-depends:
-    base >=4.6 && <4.7,
-    hakyll >= 4.4,
+    base >=4.6 && <4.8,
+    hakyll >= 4.5.2,
     pandoc >= 1.12,
     containers,
     mtl >= 2.1
