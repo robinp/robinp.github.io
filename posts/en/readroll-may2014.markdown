@@ -17,6 +17,13 @@ Posts
 
   If your collision probability is low, may get away without having globally unique ids.
 
+### [Attoparsec internals](http://www.serpentine.com/blog/2014/05/31/attoparsec/)
+
+### [Catching all exceptions](https://www.fpcomplete.com/user/snoyberg/general-haskell/exceptions/catching-all-exceptions)
+
+  A nice way to catch all exceptions from possibly dangerous code, while being reactive
+  to async exceptions thrown to the runner code.
+
 Papers
 ------
 
