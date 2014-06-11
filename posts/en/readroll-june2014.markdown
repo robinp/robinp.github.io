@@ -23,6 +23,14 @@ Posts
 
   [Apache Giraph](https://giraph.apache.org/) is the open-source alternative of [Pregel](http://kowshik.github.io/JPregel/pregel_paper.pdf), a massively parallel graph processing system. Used at Facebook to partition to graph to roughly equal-sized clusters using a stochastic node-swapping algorithm to minimize inter-partition edge weights.
 
+#### [Jackknife statistics in O(n)](http://www.serpentine.com/blog/2014/06/10/win-bigger-statistical-fights-with-a-better-jackknife/)
+
+  An interesting read about statistics and numerical stability of summing (with stable implementations in the [math-functions](http://hackage.haskell.org/package/math-functions) package).
+
+#### [The problem with mtl](http://ro-che.info/articles/2014-06-11-problem-with-mtl.html)
+
+  Outlines some shortcoming in the monad classes of the mtl. As others pointed out, using `zoom` from a lens library could ease the pain, but the author is not keen on lens.
+
 Papers
 ------
 
