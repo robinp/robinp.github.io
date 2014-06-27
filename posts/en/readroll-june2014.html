@@ -32,10 +32,32 @@
 <h2 id="posts">Posts</h2>
 <h4 id="exceptions-and-monad-transformers"><a href="http://www.yesodweb.com/blog/2014/06/exceptions-transformers">Exceptions and monad transformers</a></h4>
 <p>Summarizes the differences between, and discusses appropriate use cases for the <code>exceptions</code> and <code>monad-control</code> packages. Michael proposes using <code>MonadMask</code> and pals from <code>exceptions</code> unless more power is needed.</p>
+<h4 id="hydrabase-facebook"><a href="https://code.facebook.com/posts/321111638043166/hydrabase-the-evolution-of-hbase-facebook/">HydraBase @ Facebook</a></h4>
+<p>HydraBase is an upgrade of HBase, where region server failover is sped up by having replicas with quorum. Seems similar to Google’s <a href="http://static.googleusercontent.com/media/research.google.com/hu//pubs/archive/36971.pdf">Megastore</a>, but (among others) uses <a href="https://ramcloud.stanford.edu/wiki/download/attachments/11370504/raft.pdf">RAFT</a> for consensus instead of Paxos.</p>
+<h4 id="column-oriented-storage-facebook"><a href="https://code.facebook.com/posts/229861827208629/scaling-the-facebook-data-warehouse-to-300-pb/">Column-oriented storage @ Facebook</a></h4>
+<p>Column-oriented storage formats can be encrypted way better with tons of heuristic-based special-casing applied. Here is a link to Google’s column-oriented <a href="http://static.googleusercontent.com/media/research.google.com/hu//pubs/archive/36632.pdf">Dremel</a> warehouse paper as a self-reference. I also remember having read a similar compression paper, but can’t recall it.</p>
+<h4 id="graph-partitioning-facebook"><a href="https://code.facebook.com/posts/274771932683700/large-scale-graph-partitioning-with-apache-giraph/">Graph partitioning @ Facebook</a></h4>
+<p><a href="https://giraph.apache.org/">Apache Giraph</a> is the open-source alternative of <a href="http://kowshik.github.io/JPregel/pregel_paper.pdf">Pregel</a>, a massively parallel graph processing system. Used at Facebook to partition to graph to roughly equal-sized clusters using a stochastic node-swapping algorithm to minimize inter-partition edge weights.</p>
+<h4 id="jackknife-statistics-in-on"><a href="http://www.serpentine.com/blog/2014/06/10/win-bigger-statistical-fights-with-a-better-jackknife/">Jackknife statistics in O(n)</a></h4>
+<p>An interesting read about statistics and numerical stability of summing (with stable implementations in the <a href="http://hackage.haskell.org/package/math-functions">math-functions</a> package).</p>
+<h4 id="the-problem-with-mtl"><a href="http://ro-che.info/articles/2014-06-11-problem-with-mtl.html">The problem with mtl</a></h4>
+<p>Outlines some shortcoming in the monad classes of the mtl. As others pointed out, using <code>zoom</code> from a lens library could ease the pain, but the author is not keen on lens.</p>
+<h4 id="open-decision-making"><a href="http://www.stanford.edu/~ouster/cgi-bin/decisions.php">Open decision making</a></h4>
+<p>Interesting thoughts about a successful decision-making process. Gather input in broad-narrow phases, seek consensus by public voting, optionally intervene/override, and finally announce the decision. Don’t change or reevaluate a decision unless there is significant new information available. The public voting has a nice part, where pros/cons are put up on display, and one is not allowed to discuss anything that is already up (this prevents fruitless arguing).</p>
+<h4 id="roles-in-ghcs-type-system"><a href="https://ghc.haskell.org/trac/ghc/wiki/Roles">Roles in GHC’s type system</a></h4>
+<p>GHC 7.8 implemented type roles to avoid a possible unfortunate interplay between newtyping and <code>GeneralizedNewtypeDeriving</code>. In short, newtyping creates a new Haskell-level type, but <code>GND</code> works on the machine representation level. This impedance mismatch can cause quirks as demonstrated in the page.</p>
+<p>The solution was to make the so-far implicit type coercion of <code>GND</code> explicit: There is a new <code>Coercible a b</code> class, for which an instance exists only if the types are legally coercible (on the machine representation level). The compiler automatically infers Representational / Nominal role for type variables, and the instance exists if <code>a</code> has Representational role.</p>
+<p>Nominal role happens for example when a type variable of a type doesn’t appear in the constructor definitions (possibly with <code>GADT</code>s or type families). There is also a small niche for phantom types and the Phantom role.</p>
+<h4 id="what-happens-to-stolen-bikes"><a href="http://blog.priceonomics.com/post/30393216796/what-happens-to-stolen-bicycles">What happens to stolen bikes</a></h4>
+<p>In short: they get sold in remote cities.</p>
 <h2 id="papers">Papers</h2>
 <h4 id="type-safe-observable-sharing-in-haskell"><a href="http://www.cs.uu.nl/wiki/pub/Afp/CourseLiterature/Gill-09-TypeSafeReification.pdf">Type-Safe Observable Sharing in Haskell</a></h4>
 <p>A nice technique based on GHC’s stable names to make reference loops observable in pure EDSL-s. This is advised to be used more as an optimization than a guarantee, since the exact sharing might not always appear.</p>
-<h2 id="books">Books</h2>
+<h2 id="fun">Fun</h2>
+<h4 id="dont-shoot-portrait-videos-yt"><a href="https://www.youtube.com/watch?v=Bt9zSfinwFA">Don’t shoot portrait videos (YT)</a></h4>
+<p>With fun puppet characters, but not 100% family friendly.</p>
+<h4 id="how-software-is-engineered-yt"><a href="https://www.youtube.com/watch?v=9HQyuSSbYak">How software is engineered (YT)</a></h4>
+<p>This is the trailer from a Lego movie, showing how the idea of building a submarine concieves and how is it implemented. Can you spot the parallel?</p>
 <h2 id="stackoverlow">Stackoverlow</h2>
 
     </div>
