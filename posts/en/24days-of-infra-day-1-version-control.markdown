@@ -9,13 +9,13 @@ book3: //ws-na.amazon-adsystem.com/widgets/q?ServiceVersion=20070822&OneJS=1&Ope
 
 Inspired by [24 Days of Hackage][1], this is a post series about (a biased selection of) software infrastructure components found in modern development and serving environment.
 
-We start with development related components like versioning, building and releasing, then move to production components like queues, storange and analysis support.
+We start with development related components like versioning, building and releasing, then move to production components like queues, storage and analysis support.
 Our first topic is version control (aka source control).
 
-Hopefully it is no surprise that first thing a developer wants to do when
+Hopefully it is no surprise that the first thing a developer wants to do when
 starting a new project is to put code under version control
 (if it is a surprise, execute `git init` before it would be too late).
-Code additions and modifications then happen in logical units containing
+Code additions and modifications thus happen in logical units containing
 a set of related changes, called commits.
 Code is checkpointed after each commit, so any given state can be restored later.
 
@@ -27,19 +27,19 @@ single-developer settings.
 ### What to version?
 
 Not only source code can be versioned, but any files in general.
-It would be frustrating that we can restore source code to a previous state, but not the accompanying config files, wouldn't it?
-Therefore it makes sense to put configuration files under source control too
-(depending on what configuration means, it probably wouldn't be stored carbon copy, but rather as configuration templates and parameters seperately).
+It would be frustrating to be able to restore source code to a previous state, but not the accompanying config files, wouldn't it?
+Therefore it makes sense to put configuration files under source control, too
+^[Probably stored as configuration templates and parameters separately.].
 
 So at this point we can roll the source and configurations back to a given point in time.
-But what about compiling the source? Imagine that we roll back to a year old version, and the source at that point used a language feature that got deprecated in the mean time, and the current compiler on the build machine already rejects the source.
+But what about compiling the source? Imagine that we roll back to a year old version, and the source at that point used a language feature that got deprecated in the meantime - the current compiler on the build machine already rejects the source.
 Multiply this with the number of tools we depend on, and we have a serious problem.
-To avoid such issues, companies like Facebook or Google also keep all the tooling needed to compile the sources along under version control.
+To avoid such issues, companies like Facebook or Google also keep all the tooling needed to compile the sources under version control.
 
 ### Wait! Even binaries?
 
 Yes. When we roll back, we also get the tools to build with at that point.
-This is called a hermetic build (more about building later).
+This is called a hermetic build.
 
 If we are really keen and intend to patch the compiler every now and then, can go deeper and check in sources for the compiler and tools, then make sure the
 checked-in binary is the one resulting from compiling those sources.
@@ -48,10 +48,10 @@ checked-in binary is the one resulting from compiling those sources.
 
 Okay, let's take a step back.
 For smaller companies or startups this is quite an overhead on the short term.
-But knowing the concept helps evaluataing if the benefit is worth it.
+You are free to evaluate if the benefits are significant enough for your use-case.
 
 An alternative to checking in tooling is to have them in a versioned repository,
 and have the build scripts point to the appropriate version.
-Can you spot any drawbacks with this scheme?
+Can you spot any drawbacks of this scheme?
 
   [1]: https://ocharles.org.uk/blog/
