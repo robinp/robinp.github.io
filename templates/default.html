@@ -4,18 +4,18 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>$title$ - $trans mBlogTitle$</title>
+    <title>$title$ - $trans("mBlogTitle")$</title>
     <link rel="stylesheet" type="text/css" href="/css/default.css" />
   </head>
   <body>
     <div id="header">
       <div id="logo">
-        <a href="/">$trans mBlogTitle$</a>
+        <a href="/">$trans("mBlogTitle")$</a>
       </div>
       <div id="navigation">
-        <a href="/index$curlang$.html">$trans mStartPage$</a>
-        <a href="/contact$curlang$.html"> $trans mContactInNavbar$</a>
-        <!--a href="/archive$curlang$.html">$trans mArchiveTitle$</a-->
+        <a href="/index$curlang$.html">$trans("mStartPage")$</a>
+        <a href="/contact$curlang$.html"> $trans("mContactInNavbar")$</a>
+        <!--a href="/archive$curlang$.html">$trans("mArchiveTitle")$</a-->
       </div>
       <div id="switcher">
         <a href="/index.html">In English</a>
@@ -32,5 +32,13 @@
       $trans mSiteGeneratedBy$
       <a href="http://jaspervdj.be/hakyll">Hakyll</a>
     </div>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-57293644-1', 'auto');
+      ga('send', 'pageview');
+    </script>
   </body>
 </html>

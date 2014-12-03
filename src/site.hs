@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 import Control.Monad (filterM)
 import Control.Monad.Error.Class
-import Data.List (isInfixOf)
+import Data.List (isInfixOf, isPrefixOf)
 import Data.Map (Map)
 import qualified Data.Map as M
 import Data.Maybe
@@ -71,6 +71,12 @@ metaLang item =
   in (fromMaybe defaultLang . (>>= parseLang))
        `fmap` getMetadataField ident "lang"
 
+metaBooks :: Item a -> Compiler [String]
+metaBooks item = do
+  let ident = itemIdentifier item
+  kvs <- getMetadata ident
+  return . M.elems . M.filterWithKey (\k _ -> "book" `isPrefixOf` k) $ kvs
+
 translate :: (Item a -> Compiler Lang) -> [String] -> Item a -> Compiler String
 translate langf words item = do
   word <- nothingToError ["bad call to translate"] . exactlyOne $ words
@@ -97,6 +103,20 @@ postCtx :: Context String
 postCtx = myDefaultContext
   <> dateField "date" "%B %e, %Y"
 
+data Book = Book String
+
+bookCtx :: Context Book
+bookCtx = field "link" (\i -> case itemBody i of (Book b) -> return b)
+
+booksCtx :: [String] -> Context a
+booksCtx links =
+  let lf = listField "books" bookCtx
+         . sequence
+         . map (makeItem . Book) $ links
+  in if null links
+      then lf
+      else lf <> (constField "hasBooks" "1")
+
 main :: IO ()
 main = hakyll $ do
   match "images/*" $ do
@@ -120,8 +140,9 @@ main = hakyll $ do
     route $ setExtension "html"
     compile $ do
       lang <- getResourceBody >>= metaLang
+      links <- getResourceBody >>= metaBooks
       pandocCompiler
-        >>= loadAndApplyTemplate "templates/post.html"    postCtx
+        >>= loadAndApplyTemplate "templates/post.html" (postCtx <> booksCtx links)
         >>= loadAndApplyTemplate "templates/default.html"
               (postCtx <> setLangContext lang)
         >>= relativizeUrls

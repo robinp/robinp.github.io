@@ -6,3 +6,13 @@
 </div>
 
 $body$
+
+$if(hasBooks)$
+<h3>Read more..</h3>
+<div class="books">
+  $for(books)$
+  <iframe style='width:180px;height:240px;' marginwidth='0' marginheight='0' scrolling='no' frameborder='0' src='$link$'>
+  </iframe>
+  $endfor$  
+</div>
+$endif$
