@@ -64,6 +64,3 @@ Fun
 #### [How software is engineered (YT)](https://www.youtube.com/watch?v=9HQyuSSbYak)
 
   This is the trailer from a Lego movie, showing how the idea of building a submarine concieves and how is it implemented. Can you spot the parallel?
-
-Stackoverlow
-------------
