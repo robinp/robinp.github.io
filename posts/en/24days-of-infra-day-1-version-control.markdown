@@ -2,6 +2,7 @@
 title: 24 Days of Infrastructure - Version Control
 date: 2014-12-01
 lang: en
+comments: http://www.reddit.com/r/programming/comments/2o7jzx/24_days_of_infrastructure_version_control/
 book1: //ws-na.amazon-adsystem.com/widgets/q?ServiceVersion=20070822&OneJS=1&Operation=GetAdHtml&MarketPlace=US&source=ac&ref=qf_sp_asin_til&ad_type=product_link&tracking_id=robinp-20&marketplace=amazon&region=US&placement=1449316387&asins=1449316387&linkId=QSKEID3Y4OY3EGTY&show_border=false&link_opens_in_new_window=true
 book2: //ws-na.amazon-adsystem.com/widgets/q?ServiceVersion=20070822&OneJS=1&Operation=GetAdHtml&MarketPlace=US&source=ac&ref=tf_til&ad_type=product_link&tracking_id=robinp-20&marketplace=amazon&region=US&placement=1934356727&asins=1934356727&linkId=I4JUM7IMPWRKHZRE&show_border=false&link_opens_in_new_window=true
 book3: //ws-na.amazon-adsystem.com/widgets/q?ServiceVersion=20070822&OneJS=1&Operation=GetAdHtml&MarketPlace=US&source=ac&ref=tf_til&ad_type=product_link&tracking_id=robinp-20&marketplace=amazon&region=US&placement=B00K54OL8I&asins=B00K54OL8I&linkId=SPZEKQWK7JV77RZT&show_border=false&link_opens_in_new_window=true
