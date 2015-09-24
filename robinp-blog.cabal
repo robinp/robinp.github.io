@@ -19,7 +19,7 @@ executable site
   -- other-modules:
   -- other-extensions:
   build-depends:
-    base >=4.6 && <4.8,
+    base >=4.6,
     hakyll >= 4.5.2,
     pandoc >= 1.12,
     containers,
