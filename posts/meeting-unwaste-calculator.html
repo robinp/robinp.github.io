@@ -1,0 +1,100 @@
+
+<html>
+  <head>
+    <title>Meeting Unwaste Calculator</title>
+
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="/css/style.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/css/all.min.css"/>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+   </head>
+   <body>
+  <script>
+    function calculate() {
+      var nPart = parseInt(document.getElementById('nPart').value);
+      var tMeetingMinutes = parseInt(document.getElementById('tMeetingMinutes').value);
+      var sAvg = parseInt(document.getElementById('sAvg').value);
+      var pClarPercent = parseInt(document.getElementById('pClarPercent').value);
+      var tDiscoveryDays = parseInt(document.getElementById('tDiscoveryDays').value);
+
+      var tSavedDaysPP = tDiscoveryDays*pClarPercent/100.0;
+      var businessDaysPerYear = 260.0;
+      var tWorkdayHours = 8.0;
+      var hourRate = sAvg*1000.0 / businessDaysPerYear / tWorkdayHours;
+      var meetingCostPerHour = hourRate * nPart;
+      var meetingCost = Math.trunc(meetingCostPerHour * tMeetingMinutes / 60.0);
+      var tSavedDays = tSavedDaysPP * nPart;
+      var savedCost = Math.trunc(tSavedDays * hourRate * tWorkdayHours);
+      var meetingProfit = savedCost - meetingCost;
+
+      document.getElementById('mcost').innerText = meetingCost;
+      document.getElementById('wsaved').innerText = savedCost;
+      document.getElementById('mprof').innerText = meetingProfit;
+      var el = document.getElementById('mprof-container');
+      el.classList.remove("positive_profit", "negative_profit");
+      el.classList.add(meetingProfit > 0 ? "positive_profit" : "negative_profit");
+    }
+  </script>
+     <div class="container">
+       <iframe src="/header.html" onload="this.before((this.contentDocument.body||this.contentDocument).children[0]);this.remove()"></iframe>
+
+        <div class="row">
+          <div class="col-md-10">
+
+    <h2>Meeting Unwaste Calculator</h2>
+
+      <p>
+        As programmers, we like to give in to the <b>cliché of meetings as a waste of time and money</b>.
+        There are even a few meeting waste calculators around online.
+      </p>
+      <p>
+        <b>We tend to confuse coding</b> - the appearance of more lines in the editor - <b>with progress</b>.
+        Thus we are hostile to any interruptions, meetings included, that break our imaginary progress.
+      </p>
+      <p>
+        But remember the last time you worked on a feature for a week, only to discover later it was unneeded?
+        Or a small misunderstanding causing a bug that took a few days to find and fix?
+        <b>Meetings</b>, or any other forms of discussion, can help to <b>avoid building the wrong thing</b>, which is a lot
+        more expensive than the meeting itself.
+      </p>
+      <p>
+        Use the meeting unwaste calculator below to <b>see how much money meetings save you</b>!
+      </p>
+      <div class="row justify-content-md-center">
+        <div class="calculator col-md-auto">
+          <div class="calc_sliders">
+            <div><input oninput="calculate()" id="nPart" value=4 type='number' min=2.0 max=10.0 /> participants</div>
+            <div><input oninput="calculate()" id="tMeetingMinutes" value=30 type='number' min=5.0 max=120.0 step=5.0 /> minutes of meeting</div>
+            <div class="mt-2">Per-person averages:</div>
+            <div><input oninput="calculate()" id="sAvg" value=100 type='number' min=10.0 max=150.0 step=10.0 /> K yearly salary, in units of your choice</div>
+            <div><input oninput="calculate()" id="pClarPercent" value=5 type='number' min=0.0 max=100.0 step=5.0 /> % chance of something getting clarified</div>
+            <div><input oninput="calculate()" id="tDiscoveryDays" value=4 type='number' min=1.0 max=14.0 step=1.0 /> days until discovering that the wrong thing is built</div>
+          </div>
+          <div class="mt-2">
+                <div class="calc-result">
+                  <div>(-) Meeting cost: <span id="mcost">?</span> U</div>
+                  <div>(+) Work saved by <b>not</b> building the wrong thing: <span id="wsaved">?</span>  U</div>
+                  <div id="mprof-container">Meeting profitability: <span id="mprof">?</span> U</div>
+                </div>
+          </div>
+        </div>
+      </div>
+      <p class="mt-2">
+        <em>Exercise I: Consider why, if meetings are profitable, are we not just having meetings all day long?</em>
+      </p>
+      <p>
+        <em>Exercise II: Try to find the conditions where the meeting is a zero-profit activity.</em>
+      </p>
+
+          </div>
+        </div>
+
+       <iframe src="/forge.html" onload="this.before((this.contentDocument.body||this.contentDocument).children[0]);this.remove()"></iframe>
+
+     </div>
+    </body>
+</html>
+

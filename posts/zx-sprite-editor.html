@@ -1,0 +1,100 @@
+<html>
+  <head>
+    <title>8-bit Sprite Editor</title>
+
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="/css/style.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/css/all.min.css"/>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+  <script>
+    function zxRedraw() {
+      var pic = document.querySelector('#zxpic');
+      pic.innerHTML = '';
+      for (var i = 0; i < 8; i++) {
+        var row = document.createElement('div');
+        row.className = 'pixel_row';
+        var num = parseInt(document.querySelector('#byte' + i).value);
+        var last = document.createElement('span');
+        row.appendChild(last);
+        for (var b = 0; b < 8; b++) {
+          var lit = num % 2 == 1;
+          var pixel = document.createElement('span');
+          pixel.innerHTML = '■';
+          pixel.className = lit ? 'pixel_black' : 'pixel_white';
+          last = row.insertBefore(pixel, last);
+          num = Math.floor(num/2);
+        }
+        pic.appendChild(row);
+      }
+    }
+
+    window.onload = function() {
+      zxRedraw();
+      for (var i = 0; i < 8; i++) {
+        document.querySelector('#byte' + i).oninput = zxRedraw;
+      }
+    };
+  </script>
+
+   </head>
+   <body>
+         <div class="container">
+       <iframe src="/header.html" onload="this.before((this.contentDocument.body||this.contentDocument).children[0]);this.remove()"></iframe>
+
+        <div class="row">
+          <div class="col-md-10">
+
+    <h2>8bit Sprite Editor</h2>
+
+    <input type="number" min="0" max="255" value="126" id="byte0" />
+    <input type="number" min="0" max="255" value="129" id="byte1" />
+    <input type="number" min="0" max="255" value="129" id="byte2" />
+    <input type="number" min="0" max="255" value="129" id="byte3" />
+    <input type="number" min="0" max="255" value="66" id="byte4" />
+    <input type="number" min="0" max="255" value="36" id="byte5" />
+    <input type="number" min="0" max="255" value="24" id="byte6" />
+    <input type="number" min="0" max="255" value="126" id="byte7" />
+
+    <div class="mt-3" id="zxpic">
+    </div>
+
+    <div class="mt-3">
+              <p>
+                How to create your custom graphics (sprite)?
+              </p>
+              <p>
+                <em>1. Draw the graphics on paper.</em>
+                Take a piece of checked paper.
+                Draw a rectangle around a 8x8 area. Design the
+                graphics: fill in some cells with the pencil.
+              </p>
+              <p>
+                <em>2. Calculate the row code for each row in the graphics.</em>
+                Write the following numbers above cells of the first row, in
+                order: 128, 64, 32, 16, 8, 4, 2, 1.
+                Now for each row, look at the filled in cells.
+                In a row, add all the numbers above filled cells together.
+                For example, if your row has the first (128) and last (1)
+                cell filled, write down 129 (which is 128 + 1).
+              </p>
+              <p>
+                3. Finally enter those numbers in the field above.
+                Some ideas to draw: cup, ball, face, spaceship, horse.
+              </p>
+              <p>
+                Bonus exercise: try to POKE the codes into <a href="https://www.c64-wiki.com/wiki/Sprite">C64</a> or <a href="http://oldmachinery.blogspot.com/2014/04/zx-sprites.html">ZX Spectrum</a>.
+              </p>
+    </div>
+
+          </div>
+        </div>
+
+       <iframe src="/forge.html" onload="this.before((this.contentDocument.body||this.contentDocument).children[0]);this.remove()"></iframe>
+
+     </div>
+    </body>
+</html>
+

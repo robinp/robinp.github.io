@@ -1,0 +1,72 @@
+<html>
+  <head>
+    <title>Domain Model Pitfalls in OOP and FP</title>
+
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="/css/style.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/css/all.min.css"/>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+   </head>
+   <body>
+     <div class="container">
+       <iframe src="/header.html" onload="this.before((this.contentDocument.body||this.contentDocument).children[0]);this.remove()"></iframe>
+
+        <div class="row">
+          <div class="col-md-10">
+
+<h2>Domain Model Pitfalls in OOP and FP</h2>
+
+<p>(2020. 08. 31.)</p>
+
+<p>The encouraged domain modeling patterns of both Object-oriented Programming (OOP) and Functional Programming (FP) will eventually break our model of reality. Let’s see how.</p>
+<p>Old-school OOP encourages shoehorning all the alternatives under subclasses of a common interface, and users operating in an alternative-agnostic way. FP prefers encoding the alternatives explicitly and publicly as Algebraic Data Types (ADTs), which are kind of enums on steroids.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+<p>What code modifications are convenient? Subclasses make it easy to add a new case - we just add a new subclass, and implement the required methods locally. ADTs make it easy to add a new operation - we add a new function, and cover the existing cases locally.</p>
+<p>What modifications are cumbersome? Adding a new method to all subclasses spreads out over the source code, leading to a shotgun diff. Similarly, adding a new case to ADTs needs touching all the different operations on that ADT.</p>
+<h3 id="what-programming-patterns-are-incentivised-by-these-extremes-then">What programming patterns are incentivised by these extremes then?</h3>
+<p>Subclasses whisper that you can add more cases any time, and they will nicely fit under this uniform interface. ADTs whisper that you can add new operations any time, and your original choice of modeling reality will be suitable to perform them all.</p>
+<p>But our models of the reality are just that - incomplete models, bound to fail if stressed too much.</p>
+<p>As more subclasses are added, it is more likely that one of them won’t conform nicely to the existing interface. Then we try to fix by adding a partial method which is unsupported on some subclasses, or by hacks like downcasting (Webdriver anyone?).</p>
+<p>As more operations are demanded, it is more likely that the existing partitioning of the world into the nice distinct cases won’t suit that operation anymore. Then, as a fix, we can introduce more specific cases, or make existing ones more general - leading to ambiguity, bloat and mental load for the existing operations.</p>
+<p>This <a href="https://en.wikipedia.org/wiki/Celestial_Emporium_of_Benevolent_Knowledge">ancient Chienese categorization of animals</a> - likely made up by Borges - illustrates the end result of those piling hacks with shocking accuracy.</p>
+<ol type="1">
+<li>those that belong to the Emperor,</li>
+<li>embalmed ones,</li>
+<li>those that are trained,</li>
+<li>suckling pigs,</li>
+<li>mermaids,</li>
+<li>fabulous ones,</li>
+<li>stray dogs,</li>
+<li>those included in the present classification,</li>
+<li>those that tremble as if they were mad,</li>
+<li>innumerable ones,</li>
+<li>those drawn with a very fine camelhair brush,</li>
+<li>others,</li>
+<li>those that have just broken a flower vase,</li>
+<li>those that from a long way off look like flies.</li>
+</ol>
+<h3 id="what-should-we-do-then">What should we do then?</h3>
+<p>OOP lures us with the false promise that everything is uniform under the Sun. FP lures us with the false promise that we are smart enough and able to precisely model reality. I assume we are naturally drawn to one extreme or the other based on our mindset. For example, I tend to think in edge-cases, so the explicitness and non-uniform representation of ADTs appeal to me.</p>
+<p>What should we do then? There are two main factors - economic realities of programming, and personal tendencies (when contrasted with team preferences). Be aware of the pitfalls of your modeling, realize when the burden of maintainability exceeds the cost of a refactoring, and then act. Be aware of your natural tendencies, and slightly counterbalance. Don’t oversimplify, but don’t overcomplicate either.</p>
+<section class="footnotes" role="doc-endnotes">
+<hr />
+<ol>
+<li id="fn1" role="doc-endnote"><p>It was observed that a subclassing and ADTs are duals: they encode the same information and can perform the same work. They differ in the way of representation, and what maintenance work is convenient to perform on them. Alternative subclasses correspond to alternative cases. Pattern-matching (or folding) an ADT corresponds to a <code>Visitor</code> on the subclasses.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+
+
+
+
+          </div>
+        </div>
+
+       <iframe src="/forge.html" onload="this.before((this.contentDocument.body||this.contentDocument).children[0]);this.remove()"></iframe>
+
+     </div>
+    </body>
+</html>
+

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Serving your Desktop to the World - TreeTide</title>
+
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="/css/style.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/css/all.min.css"/>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+   </head>
+   <body>
+     <div class="container">
+       <iframe src="/header.html" onload="this.before((this.contentDocument.body||this.contentDocument).children[0]);this.remove()"></iframe>
+
+        <div class="row">
+          <div class="col-md-10">
+
+    <h2>Serving your Desktop to the World</h2>
+
+    <p>
+      Being able to access your desktop machine from the outside world is very
+      handy as an entrepreneur / coding addict.
+    </p>
+    <p>
+      Say you are working on your SaaS product, duct-taped together on a
+      local machine. It's high on your TODO list to prepare automated deployment
+      to a remote server. But there comes a sudden opportunity to pitch to a
+      prospective client.
+    </p>
+    <p>
+      A quick, effective - and somewhat dangerous - way is to let the outside
+      world access your local HTTP server. Given your dev server is listening
+      on port <code>3000</code> locally, forward that to a server in the cloud
+      that has ip <code>a.b.c.d</code>:
+    </p>
+    <pre>ssh -R 8080:localhost:3000 user@a.b.c.d</pre>
+    <p>
+      So now <code>a.b.c.d:8080</code> is accessible from the outside.. Or not.
+      SSH will by default bind to port <code>8080</code> on the <code>loopback</code>
+      interface having ip <code>127.0.0.1</code>, not being accessible from the outside.
+      You can verify that by observing the output of <code>netstat -nlp</code>
+      on the server.
+    </p>
+    <div class="row my-sm-3">
+      <div class="col"></div>
+      <div class="col-md-5">
+        <p class="mb-0">
+          <i>If you have root</i> on the remote machine, set
+          <code>GatewayPorts clientspecified</code> in <code>sshd_config</code>, and pass
+          in the all-interfaces remote ip <code>0.0.0.0</code> explicitly.
+        </p>
+        <pre>ssh -R 0.0.0.0:8080:localhost:3000 user@a.b.c.d</pre>
+      </div>
+      <div class="col"></div>
+      <div class="col-md-5">
+        <p class="mb-0">
+          <i>If you don't have root</i>, then redirect the port using a user-space program.
+          I found <a href="https://github.com/vinodpandey/python-port-forward">python-port-forward</a>
+          to be handy, since most servers have <code>python</code> interpreter installed
+          out of the box. Put <code>9000 localhost 8080</code> in <code>port-forward.config</code>
+          to expose your server on port <code>9000</code>.
+        </p>
+      </div>
+      <div class="col"></div>
+    </div>
+    <p>
+        <span class="badge badge-warning">Warning</span> Leave your
+        machine exposed only as long as needed for the demo. Apply good server
+        config practices locally as well. For example, disable file uploads
+        and jail the webserver root so none of your files get exposed.
+    </p>
+    <p>
+        <span class="badge badge-info">Tip</span> I often forget
+        if I should use the <code>-R</code> or <code>-L</code> flag, also the
+        order of the ports in the <code>port1:host:port2</code> parameter.
+        Never mind, just try a random variation and check what port is bound
+        where using <code>netstat -nlp</code> on both machines.
+    </p>
+    <p>
+        <span class="badge badge-info">Tip</span> This technique
+        can also be used to expose your development box through SSH, so you
+        can keep working while on
+        vacation. <span class="palm-tree"/>
+    </p>
+
+          </div>
+        </div>
+
+       <iframe src="/forge.html" onload="this.before((this.contentDocument.body||this.contentDocument).children[0]);this.remove()"></iframe>
+
+     </div>
+    </body>
+</html>
+

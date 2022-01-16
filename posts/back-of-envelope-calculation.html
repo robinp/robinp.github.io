@@ -1,0 +1,94 @@
+<html>
+  <head>
+    <title>Back of the Envelope Calculations</title>
+
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="/css/style.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/css/all.min.css"/>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+   </head>
+   <body>
+     <div class="container">
+       <iframe src="/header.html" onload="this.before((this.contentDocument.body||this.contentDocument).children[0]);this.remove()"></iframe>
+
+        <div class="row">
+          <div class="col-md-10">
+
+    <h2>Back of the Envelope Calculations</h2>
+<dl>
+<dt>Back of the envelope calculation:</dt>
+<dd>A quick and approximate calculation that gives us further insight.
+Presumably carried out on the back of an envelope or a napkin.
+</dd>
+</dl>
+
+<h3>Why do we need it?</h3>
+<p>Sometimes we face a choice between alternative architectures. Is a single server sufficient? If not, <strong>how many servers would we need</strong>? The calculation gives us a rough estimate.</p>
+
+<p>The calculation tells us</p>
+<ul>
+<li>if the architecture can fulfill the functional requirements, for example number of supported users or response latency,</li>
+<li>the resource requirements.</li>
+</ul>
+<h3>How to do it?</h3>
+<p><b>Recognize a limited resource, then approximate the required amount</b>. For example, servers are capped by 2GHz CPUs. Can we serve all requests using a single server?</p>
+<p>How to approximate the required amount? We divide and conquer, by <b>breaking down the usage</b> to its constituting factors, making a <b>rough estimate</b> of those factors</b>, and <b>combining</b> them.</p>
+<p>For example, we might expect to have 1K active users, each issuing 15 requests per day. That’s 15K requests per day, or 15K/86400 requests per second.</p>
+<p>When combining the parts, <b>a trick is to round aggressively</b>. Division by 86400? No thanks. So let’s round to 20K/100K, leaving 0.2 seconds time available to serve a single request. If we know that a single request roughly takes 0.7 seconds to serve, we need to bring up 4 machines. Of course you don’t want to live on the edge, so let’s add some buffer and make that 5 machines.</p>
+
+<h3>On quick operations</h3>
+<p>Prefer using <b>small numbers along with abbreviation for magnitude</b> (or, if needed, exponents) rather than writing out a full number. 10K instead of 10000.</p>
+<p>If given a large and overly-precise number, for example 7432, instantly convert and write it down as 7K. You are approximating anyway.</p>
+<p>Having numbers in this form <strong>makes multiplication and division fast</strong>. K*K is M. G/M is K. 4K*7M=28G. To work with larger numbers, round both of them towards a small multiple of a power of 2 or 10.</p>
+<ul>
+<li>27*14 ~ 30*10 = 300.</li>
+<li>6500/250 ~ 6400/256 ~ 100 * 2^6 / 2^8 ~ 100 / 2^2 = 25.</li>
+</ul>
+<h3>Dimensions to approximate</h3>
+<p>Find typical limited dimensions along with exercises below.</p>
+<dl>
+<dt>Network bandwidth</dt>
+<dd><p>Assuming 1Gbps link per machine, if we want to crawl 70TB of websites every day, how many machines would a crawler system need?</p>
+</dd>
+<dt>Storage space</dt>
+<dd><p>How much space would it take to store the contents of 100M web pages? What if we substitute each word by an integer index? How many machines of 64GB SSD would it fit?</p>
+</dd>
+<dt>IO throughput</dt>
+<dd><p>You store fetched web pages on a mechanical hard drive, with limited random access speed. Users issue requests with 100 query per sec (qps), each request typically returning the content of 20 pages. How many hard drives would you need to keep request latency low?</p>
+</dd>
+<dt>Engineering effort.</dt>
+<dd><p>You need to deliver a new feature. There are 5 programmers and 40 tasks. How many weeks until possible launch?</p>
+</dd>
+<dt>Money.</dt>
+<dd><p>A user pays $10 a month for your image store service, storing all their photos, each downsized to 3MB. During a month a user fetches 1K photos. Find the pricing page of your favorite cloud provider, and calculate the cost associated with each user. How much is your revenue per user? Check for different assumed photo counts.</p>
+</dd>
+</dl>
+<p>Others include <b>CPU time, RAM size, latencies of various kinds</b> (disk access, RAM access, network), thread count.</p>
+<h3>Where to start?</h3>
+<p>
+Enumerate typical <b>use-cases of the system and determine the most critical
+resources they need</b>. A document store will need lots of storage.
+Guesstimating document sizes and counts is a good start, but further details
+will depend on usage. How often are new documents added? Are the documents
+searchable? Do we need any indices? Is it a write-heavy or read-heavy store?
+</p>
+<p>Sometimes different use-cases will need very different shapes of resources. For example, serving the documents might need lots of RAM but not CPU, while preprocessing new documents the other way around. Hosting all those services on homogeneous machines would waste both CPU and RAM, since you need to get machines which are maxed on both dimensions.</p>
+<p>Such differences indicate those features should be split to different services, hosted on independent sets of machines.</p>
+<h3>Real data</h3>
+<p>Outside of system design interviews, you can reach out to <a href="https://dilbert.com/strip/2010-08-11">actual data</a>. Spend some time mining the monitoring dashboards to get usual CPU usage. Perform a load test to measure peak RAM consumption. Run a SQL query to get the average number of photos stored by user.</p>
+<p>It doesn’t need to be an either-or. Complement assumptions with data-backed facts if needed.</p>
+<h3>Useful resources</h3>
+<p>A summary of <a href="https://gist.github.com/jboner/2841832">numbers every engineer should know</a>. Or at least know where to look up ;)</p>
+
+          </div>
+        </div>
+
+       <iframe src="/forge.html" onload="this.before((this.contentDocument.body||this.contentDocument).children[0]);this.remove()"></iframe>
+
+     </div>
+    </body>
+</html>
+

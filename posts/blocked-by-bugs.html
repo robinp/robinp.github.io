@@ -1,0 +1,94 @@
+<html>
+  <head>
+    <title>Help! I'm blocked by other people's bugs! - TreeTide</title>
+
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="/css/style.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/css/all.min.css"/>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+   </head>
+   <body>
+     <div class="container">
+       <iframe src="/header.html" onload="this.before((this.contentDocument.body||this.contentDocument).children[0]);this.remove()"></iframe>
+
+        <div class="row">
+          <div class="col-md-10">
+
+    <h2>Help! I'm blocked by other people's bugs!</h2>
+
+    <p>
+      <q>I'm stalled with my project due to bugs in these other projects I depend on.</q>
+      We hear every now and then. Maybe even use it as an excuse.
+      The problem with this complaint is twofold.
+    </p>
+    <p>
+    </p>
+    <p>
+      <b>First, using that dependency was a choice</b>. Whenever we depend,
+      we have to evaluate the risk of the dependency, versus the expected
+      gains.  How likely will this lib give us a productivity boost? How likely
+      will we run into issues using it?
+    </p>
+    <p>
+      So, careful upfront evaluation helps us avoid the worst dependencies.
+    </p>
+    <p>
+      <b>Second, it is guaranteed to run into issues</b> even with the best
+      kind of dependencies as well. Then we can shrug and wait for them to
+      triage, identify, prioritize, fix and release the bug. Or we can roll up
+      our sleeves, dive in and fix it.
+    </p>
+    <p>
+      For example, I was working on a green-field project with dear mates.
+      Though somewhat inexperienced, we strived to use technology promising
+      a balance of stability and productivity. A part of the task was sending
+      <code>protobuf</code> messages through <code>ZeroMQ</code>. Easy.
+    </p>
+    <ul>
+    <li>
+      Then I experienced rare crashes. Developing in Java, the segmentation
+      fault seemed daunting. I could have sat back, but rather I
+      <a href="https://github.com/zeromq/jzmq/issues/24">kept digging</a>, and
+      eventually landed a small fix. Happy ending. Or is it?
+    </li>
+    <li>
+      Next I realized some field were missing from the transmitted messages.
+      The sender side used Python, and after quite some digging, I found an
+      indentation error in the official Protobuf Python bindings, causing some
+      code to be executed outside a loop (details foggy).
+    </li>
+    <li>
+      More recently, I added Prometheus monitoring to a small tool I wrote in
+      Haskell, which issued concurrent fetches. It was about 100 lines, and
+      on the second run I managed to get a deadlock from the GHC runtime.
+      Such is my luck. This time I worked around by limiting concurrent cores,
+      worked on getting a minimal repro, and <a href="https://ghc.haskell.org/trac/ghc/ticket/13751">
+      opened a ticket</a>.
+    </li>
+    </ul>
+    <p>
+      <b>But was that all what could have been done?</b>
+    </p>
+    <p>
+      No. There are alternate strategies.
+      Backtrack and choose a different dependency.
+      Ask if the feature is really needed, and maybe drop it.
+      Hack around the bug, fix it with duct tape.
+      If it only happens on lists of size one, pad the list with a dummy extra element.
+    </p>
+    <p>
+      Don't let yourself be blocked. Open bugs. But <b>keep making progress</b>.
+    </p>
+
+          </div>
+        </div>
+
+       <iframe src="/forge.html" onload="this.before((this.contentDocument.body||this.contentDocument).children[0]);this.remove()"></iframe>
+
+     </div>
+    </body>
+</html>
+

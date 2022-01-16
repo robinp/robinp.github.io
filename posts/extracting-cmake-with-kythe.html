@@ -1,0 +1,70 @@
+<html>
+  <head>
+    <title>Extracting CMake with Kythe</title>
+
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="/css/style.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/css/all.min.css"/>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+   </head>
+   <body>
+     <div class="container">
+       <iframe src="/header.html" onload="this.before((this.contentDocument.body||this.contentDocument).children[0]);this.remove()"></iframe>
+
+        <div class="row">
+          <div class="col-md-10">
+
+    <h2>Extracting CMake with Kythe</h2>
+      <p>
+         You want to extract a C project using Kythe, but the project doesn't
+         use a Kythe-supported build tool? You can, if you are willing to hack
+         a bit and intercept the compiler.
+      </p>
+      <p>
+        Create a script <code>mycc</code> with the content:
+      </p>
+      <pre>
+        #!/bin/bash
+        echo "$@" &gt;&gt; /tmp/mycc.log
+        KYTHE_OUTPUT_DIRECTORY=/tmp/entries /opt/kythe/extractors/cxx_extractor $@
+        gcc $@
+      </pre>
+      <p>
+        Create a similar script <code>mycxx</code>, using <code>g++</code>
+        instead <code>gcc</code>. Then test your setup:
+      </p>
+      <pre>
+        git clone https://github.com/ttroy50/cmake-examples
+        cd cmake-examples/01-basic/B-hello-headers
+        chmod +x ./mycc ./mycxx
+        mkdir /tmp/entries
+        CC=$(readlink -f /path/to/mycc) CXX=$(readlink -f mycxx) cmake .
+        CC=$(readlink -f /path/to/mycc) CXX=$(readlink -f mycxx) make
+      </pre>
+      <p>
+        Now the Kythe entries are available, and you can continue the pipeline
+        at indexing them.
+      </p>
+      <p>
+        <span class="badge badge-warning">Note:</span>
+        This is not a complete solution. You will get errors when the
+        extractor is invoked on linker arguments. You can ignore these, but
+        don't be surprised if some gcc command-line massaging is needed for
+        complicated situations.
+      </p>
+      <p>
+        Have fun hacking!
+      </p>
+
+          </div>
+        </div>
+
+       <iframe src="/forge.html" onload="this.before((this.contentDocument.body||this.contentDocument).children[0]);this.remove()"></iframe>
+
+     </div>
+    </body>
+</html>
+

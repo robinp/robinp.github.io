@@ -1,0 +1,239 @@
+html, body {
+  overflow-x: hidden;
+}
+
+iframe {
+  border: 0px; /* For iframe imports, to prevent flash. */
+}
+
+body {
+  background: #ffffff;
+}
+
+blockquote p:before {
+  content: open-quote;
+  font-size: 20pt;
+}
+
+blockquote p:after {
+  content: close-quote;
+}
+
+.tt_bonus_chapter {
+  color: green;
+  font-size: 10pt;
+  font-style: italic;
+}
+
+.tt_pdf_format {
+  font-size: 10pt;
+}
+
+.tt_nospam {
+  font-size: 10pt;
+  color: grey;
+}
+
+.tt_hero1 {
+  font-size: x-large;
+}
+.tt_hero2 {
+  font-size: larger;
+}
+
+.tt_testimony {
+  height: 100%;
+}
+
+blockquote > p:before {
+  content: '';
+}
+
+.tt_testimony blockquote {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.tt_vfill {
+  hegiht: 100%;
+  flex: 1;
+}
+
+.tt_smallcaps {
+  font-variant: small-caps;
+}
+
+.tt_author img {
+  width: 108px;
+  max-width: 10vw;
+  float: left;
+  margin-right: 10px;
+}
+
+.tt_author a {
+  color: grey;
+}
+.tt_author a:hover {
+  color: #6495ED;
+}
+
+.tt_pretext ul {
+  margin-bottom: 0.5rem;
+}
+
+.tt_pretext li {
+  margin-top: 10px;
+  width: 85%;
+}
+
+.tt_company_logos_pretext {
+  /* magic full-width bars from css-tricks */
+  margin: 0 -9999rem;
+  padding: 0.25rem 9999rem;
+
+  background: #eee;
+  padding: 5px 0px 5px;
+  font-style: italic;
+
+  margin-top: 1rem;
+}
+
+.tt_company_logos {
+  /* magic full-width bars from css-tricks */
+  margin: 0 -9999rem;
+  padding: 0.25rem 9999rem;
+
+  background: #f8f8f8;
+  padding: 5px 0px 5px;
+}
+
+.tt_company_logos img {
+  max-height: 4vw;
+  min-height: 25px;
+  filter: none;
+  -webkit-filter: grayscale(100%);
+  -moz-filter:    grayscale(100%);
+  -ms-filter:     grayscale(100%);
+  -o-filter:      grayscale(100%);
+}
+
+.tt_book_image {
+  height: 200px;
+}
+
+.tt_toc {
+  height: 350px;
+  max-height: 70vh;
+  overflow-y: scroll;
+  border: 1px solid lightgrey;
+  border-radius: 5px;
+}
+
+
+.tt_toc > ul > li {
+  font-weight: bold;
+  clear: both;
+}
+.tt_toc > ul > ul > li {
+  clear: both;
+}
+
+.tt_toc > ul > ul > ul {
+}
+
+.tt_toc > ul > ul > ul li {
+  font-style: italic;
+  float: left;
+  margin-left: 30px;
+}
+
+.tt_paddle {
+  height: 18px;
+}
+
+.tt_buy_button {
+  padding: 10px 12px !important;
+  font-size: medium !important;
+}
+
+.tt_price_value {
+  font-weight: bold;
+}
+
+.tt_please_download_sample {
+  cursor: pointer;
+}
+
+.tt_early_access li {
+  margin-bottom: 0.5rem;
+}
+
+.Terms_tt_terms h3, h4 {
+  padding-top: 1rem;
+  padding-bottom: 0.5rem;
+}
+
+pre {
+  background: #e7e9ea;
+  border-radius: 5px;
+  padding: 3px;
+}
+
+span.palm-tree:before {
+  /* content: "\1f334"; */
+}
+
+span.fire:before {
+  /* content: "\1f525"; */
+}
+
+span.postdate {
+  color: grey;
+}
+
+.calculator {
+  padding: 5px;
+  border: 1px solid grey;
+}
+
+.calc_sliders input[type=number]{
+  width: 50px;
+}
+
+.positive_profit {
+  font-weight: bold;
+  color: green;
+}
+.negative_profit {
+  font-weight: bold;
+  color: red;
+}
+.calc_result {
+  margin-top: 5px;
+}
+
+.pixel_row {
+  line-height: 0.8;
+}
+.pixel_black {
+}
+.pixel_white {
+  color: white;
+}
+
+.tt_subhead {
+  font-weight: bolder;
+}
+
+.tt_post {
+  font-size: 18px;
+}
+
+.tt_post dd {
+  margin-left: 1rem;
+}
+
+.tt_post ul li {
+  margin-bottom: 1rem;
+}

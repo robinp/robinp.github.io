@@ -1,0 +1,101 @@
+<html>
+  <head>
+    <title>Learnings about Systemd for mounting EBS volumes</title>
+
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="/css/style.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/css/all.min.css"/>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+   </head>
+   <body>
+     <div class="container">
+       <iframe src="/header.html" onload="this.before((this.contentDocument.body||this.contentDocument).children[0]);this.remove()"></iframe>
+
+        <div class="row">
+          <div class="col-md-10">
+
+<h2>Learnings about Systemd for mounting EBS volumes</h2>
+
+<p>Recently I needed to learn more about <code>systemd</code>. The man-pages
+are great, but here are a few semi-surprising points.
+
+<h3>Mounting disks</h3>
+
+<p>The entries in <code>/etc/fstab</code> are dynamically converted to <a href="https://www.freedesktop.org/software/systemd/man/systemd.mount.html">systemd
+  mount units</a>, and mounting is managed by systemd. After changing
+fstab, you can invoke <code>systemctl daemon-reload</code> to regenerate the
+dynamic config, and <code>systemctl list-units --type=mount</code> to list the mount units. Try the latter now.
+
+<p>This means other units can depend on mounts being ready, using the
+<code>RequiresMountsFor</code> <a
+href="https://www.freedesktop.org/software/systemd/man/systemd.unit.html">unit
+directive</a>.
+
+<p>Even though an fstab entry and a hand-written mount unit is supposed to be
+equal, fstab is more equal - there are certain magic fstab options that don't
+(yet) have a hand-written mount unit counterpart. Specifically,
+<code>x-systemd.device-timeout=</code> lets you specify how long the mount unit
+should wait for the device to appear. Also, <b><code>x-systemd.makefs</code> will
+  format the disk if it doesn't yet contain a filesystem</b>, which is handy when
+creating nodes and disks automatically. Therefore using fstab is superior to
+hand-written mount units.
+
+<p>Sidenote: <code>cloud-init</code>'s <code>mounts</code> module is not a good
+way to write fstab entries, if the devices attach to the instance later - since
+cloud-init will check if the device exists, and if not, omits adding the fstab
+entry. Rather, use <code>bootcmd</code> to write the fstab entries manually.
+
+<p>Which device name to use? When attaching multiple EBS volumes, the
+device name (<code>/dev/nvme...</code>) doesn't hint about the identity of the
+device. But you can use the <code>/dev/disk/by-id/....volXXX</code> stable
+identifier based on the EBS volume id.
+
+<h3>Chained loading</h3>
+
+<p>There are orthogonal but interrelated concepts of startup ordering between
+units (<code>Before/After</code>) and dependencies between units
+  (<code>Wants/Requires/...</code>).  You can inspect unit dependencies by
+  issuing <code>systemd-analyze dot the-unit</code>, which will output the
+  ordering and dependency relations in graphviz format.
+
+<p>Dependencies control what other units a given unit will pull in to the
+activation set (transaction), if the given unit is to be activated itself.
+But it doesn't impose ordering.
+
+<p>Ordering relations take effect <b>only if both units are activated in the
+  same transaction</b>. They are attempted to be activated in the same
+transaction, if they are both transitively pulled in by a top-level unit to be
+activated. But most often, they will be direct dependencies.
+
+<p>What about restarts and dependencies? I would have naively assumed that a
+restart happens in response to a failure, but there was no mention in the
+systemd docs that after a successful restart of a failed unit, its reverse
+dependencies would be restarted as well. As far I understand now, <b>I was
+wrong</b>.  In systemd terminology, restarts don't yet cause a unit to fail.
+Only exhausting the restart limit will transition the unit to a
+<code>failed</code> state. There are no automatic attempts to recover from the
+failed state.
+
+<h3>What is multi-user.target anyway?</h3>
+
+<p>So what determines the set of units to start up during boot? The pseudo-target <code>multi-user.target</code>'s dependencies.
+This is why you often see a reverse-dependency
+<code>WantedBy=multi-user.target</code> in the <code>Install</code> section.
+
+<p>What is the <code>Install</code> section, by the way? The reverse dependencies
+listed there only get added, if you enable a unit using <code>systemctl enable the-unit</code> (enabling actually just adds a symlink).
+So a unit can declare a reverse-dependency on multi-user.target - that is, the potential to be auto-started during boot -,
+but users can actually control if they want the auto-start to happen.
+
+          </div>
+        </div>
+
+       <iframe src="/forge.html" onload="this.before((this.contentDocument.body||this.contentDocument).children[0]);this.remove()"></iframe>
+
+     </div>
+    </body>
+</html>
+
