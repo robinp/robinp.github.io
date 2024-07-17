@@ -1,0 +1,166 @@
+<html>
+  <head>
+    <title>Apollo 11, LGC and Universal Systems Language</title>
+
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="/css/style.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/css/all.min.css"/>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+   </head>
+   <body>
+     <div class="container">
+       <iframe src="/header.html" onload="this.before((this.contentDocument.body||this.contentDocument).children[0]);this.remove()"></iframe>
+
+        <div class="row">
+          <div class="col-md-10">
+
+            <h2>Apollo 11, LGC and Universal Systems Language</h2>
+
+            <p>I read <a href="https://en.wikipedia.org/wiki/Apollo_11">https://en.wikipedia.org/wiki/Apollo_11</a> and got curious about
+the guidance computer (LGC). Turns out sources are available at
+<a href="https://github.com/chrislgarry/Apollo-11/tree/master/Luminary099">https://github.com/chrislgarry/Apollo-11/tree/master/Luminary099</a>.</p>
+<p>The software was implemented by a team of 300+ programmers lead by
+Margaret Hamilton, a great effort. She also received an award recently
+in recognition of her work - having apparently coined the term “software
+engineering”, and driving formalism and best practices into a until-then
+wild-west approach. Some feats of their work that captured my
+imagination include:</p>
+<ul>
+<li><p>Treating the humans as part of the system, and accounting for
+possible human error.</p></li>
+<li><p>Writing LGC in some mix of higher-level interpreted and a
+low-level assembly. Interpreted was slower, but was more feature rich
+and took less ROM space, which was crucial at the time.</p></li>
+<li><p>The runtime having some kind of task priority system that could
+shed unimportant tasks.</p></li>
+<li><p>The runtime having some checkpointing system to be able to
+recover from errors.</p></li>
+</ul>
+<p>Wikipedia also pointed that Hamilton created various businesses to
+further refine their ideas about error prevention and fault tolerance. I
+thought I found some secret goldmine of knowledge, and was eager to find
+out what they were up to.</p>
+<p>The ideas were implemented in methodologies called Higher Order
+Software (HOS), or later Universal Systems Language (USL). The main
+materials I used for research are:</p>
+<ul>
+<li>promotional HOS/USL journal articles, like <a
+href="https://web.archive.org/web/20190711064116/http://htius.com/Articles/r12ham.pdf">Lessons
+Learned from Apollo</a></li>
+<li><a
+href="https://web.archive.org/web/20190827072822/http://www.htius.com/Articles/mhh_lmc_ieee28ms.pdf">slides</a>
+from the htius.com website</li>
+<li>Hartmut Huber’s <a
+href="https://apps.dtic.mil/sti/citations/ADA198753">1987 review</a>
+performed for the navy</li>
+<li>a grilling <a
+href="https://www.cs.utexas.edu/users/EWD/transcriptions/EWD08xx/EWD852.html">article
+by Dijkstra</a></li>
+<li>some <a href="https://news.ycombinator.com/item?id=8736450">Hacker
+News folklore</a> and <a
+href="https://news.ycombinator.com/item?id=20395129">more</a></li>
+</ul>
+<p>The promotional message that captured my imagination is this:</p>
+<blockquote>
+<p>The Universal Systems Language (USL) is based on a preventive,
+development-before-the-fact philosophy that does not allow errors in, in
+the first place. USL has evolved over several decades, offering system
+engineers and software developers a language they can use to solve
+problems previously considered next to impossible to solve with
+traditional approaches.</p>
+</blockquote>
+<p>From a modern perspective, when hearing above, I would have though
+about: a set of clear best-practices, usage of formal methods, strong
+type systems, robustness checking with QuickCheck, TLA+…</p>
+<p>Turns out, you need to rewind to 1969 to interpret it. For example,
+Hamilton saw people hardcode relative data field offsets at the
+use-sites when accessing data structures defined in foreign modules,
+leading to all kinds of now-expectable coupling and out-of-sync bugs.
+She realized that as a problem, and proposed accessing data only via an
+API, which is accessed by name, not by hardcoded offsets (that is,
+calling named labels in the assembler instead of hardcoding).</p>
+<p>Translating to contemporary terms, if I had to promote USL, this is
+what I would write:</p>
+<blockquote>
+<p>A (pure?) functional language with compile-time type checking, that
+comes with a GUI, a set of battle-tested avionics libraries (?), and
+compiler backends able to target 1970’s era systems (?). It also has a
+runtime which supports fixed priority based scheduling of lightweight
+threads (?).</p>
+</blockquote>
+<p>This more modest presentation might not draw much attention nowadays,
+but might still appeal to people who need to work in that avionics niche
+today - is that tech still alive? The idea to put a functional (note,
+Dijkstra means that under “applicative”) language to production at the
+time could have been radical.</p>
+<p>What is particularly sad, that this system might have been
+revolutionary in its time, but keeping presenting it as still
+revolutinary today gives false hopes to interested people.</p>
+<h2 id="random-details">Random details</h2>
+<p>Some thoughts I noted while reading about HOS/USL. First, HOS
+advertises that once you wrote your data types and functions well, you
+can reuse them infinitely, giving loads of productivity boost. But the
+modern realization is that as domains get larger, an initially adequate,
+shared representation and logic starts to no longer fit it. What
+initially seemed like a single concept, turns out to mean slightly
+different things to different components. Thus domains should be
+isolated and kept mostly independent, raising a barrier to reuse. See
+Domain Driven Design.</p>
+<p>HOS mentions the code written is “provably correct”. Naturally such
+an universal statement raises hairs in programmers. But I remember
+myself being fascinated by the Curry-Howard correspondence (often quoted
+by Haskell people), which relates logics to type systems - provability
+in the logic corresponds to being able to construct a program that
+type-checks in the related type system. So you can’t really blame HOS
+for using that argument some 20 years in advance. Even if “typechecks”
+is not really the same as “provably correct”.</p>
+<h3 id="the-navy-review-paper">The navy review paper</h3>
+<p>The paper concludes there’s no silver bullet, and HOS still needs
+tedious programming. Which might have been amplified by having to edit
+in a tree-based GUI? Interestingly, even the navy review paper mentions
+it is not concievable that a non-GUI editor could exist for this system.
+Why? Was there some GUI kool-aid permeating everything in the 1980’s?
+Why would a simple functional language not be edited as text?</p>
+<p>The paper also mentions that the primitives in HOS are leaky, and in
+practice one still needs to think about implications on the target
+architectures. For example, the integer type in HOS would compile to the
+targets native integer, causing problems due to difference in overflow
+behavior.</p>
+<blockquote>
+<p>imperfections creep into the methodology and proliferate the
+theoretical beauty</p>
+</blockquote>
+<p>It seems HOS was functional, but didn’t support passing a function as
+an argument, or defining lambda expressions. Which made
+higher-order-functions hard/impossible? Would be quite a pun that Higher
+Order Software doesn’t support higher order functions.</p>
+<p>Performance issues are mentioned stemming from the functional
+approach. For example, matrix multiplication cites the need of creating
+many intermediate matrices. It is fun how for example even today, GHC -
+the state of the art Haskell compiler - needs layers of black magic (ST
+monad, rewrite rules, optimization phases) to enable competitive
+performance. I can feel the pain of the HOS implementers and their
+boldness to go forward nevertheless.</p>
+<h3 id="slide-notes">Slide notes</h3>
+<p>The USL slides found are pretty hectic. The GUI-first approach to development
+seems to reflect on the slides - AST-like structures are laid out as a
+tree, making them indeed seem hierarchical, but hard to comprehend.
+Standard text-based representation of functions would be more
+accessible?</p>
+<p>The language doesn’t seem to have sum types (aka enums on steroids).
+This maybe makes the <code>or</code> construct more error-prone than
+what could be represented with sum types. Well, that’s true for most of
+the programming languages until recently.</p>
+
+          </div>
+        </div>
+
+       <iframe src="/forge.html" onload="this.before((this.contentDocument.body||this.contentDocument).children[0]);this.remove()"></iframe>
+
+     </div>
+    </body>
+</html>
+
